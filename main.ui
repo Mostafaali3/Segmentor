@@ -175,6 +175,661 @@ font-weight:500;</string>
        </layout>
       </item>
       <item>
+       <widget class="QStackedWidget" name="stackedWidget">
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <widget class="QWidget" name="thresholding_page">
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QWidget" name="widget_3" native="true">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>100</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border: 1px solid #edf6f9;
+border-radius: 10px;</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout">
+             <item row="0" column="4">
+              <layout class="QVBoxLayout" name="verticalLayout_13">
+               <property name="topMargin">
+                <number>30</number>
+               </property>
+               <item>
+                <widget class="QPushButton" name="apply_threshold">
+                 <property name="minimumSize">
+                  <size>
+                   <width>200</width>
+                   <height>35</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>200</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color:#edf6f9;
+border-radius: 5px;
+color:#006d77;
+font-size: 16px;
+font-weight:500;</string>
+                 </property>
+                 <property name="text">
+                  <string>Apply</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="0" column="3">
+              <layout class="QVBoxLayout" name="verticalLayout_8">
+               <property name="rightMargin">
+                <number>20</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="label_7">
+                 <property name="styleSheet">
+                  <string notr="true">background-color: #006d77;
+color:#edf6f9;
+font-size: 16px;
+font-weight:500;
+border: None;</string>
+                 </property>
+                 <property name="text">
+                  <string>Threshold value:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_8">
+                 <item>
+                  <widget class="QSlider" name="threshold_value_slider">
+                   <property name="maximumSize">
+                    <size>
+                     <width>250</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">QSlider {
+    border: none;  /* Ensure no border is applied to the entire slider */
+    background: transparent;  /* Avoid unwanted background effects */
+}
+
+QSlider::groove:horizontal {
+    border: none;  /* Remove the border */
+    background: #004c4f;  /* White track */
+    height: 5px;
+    border-radius: 1.5px;
+}
+
+QSlider::sub-page:horizontal {
+    background: #edf6f9;  /* Light teal progress */
+    border: none;  /* Remove any unintended borders */
+    height: 3px;
+    border-radius: 1.5px;
+}
+
+QSlider::add-page:horizontal {
+    background: #ffffff;  /* Dark teal for remaining track */
+    border: none;  /* Remove any unintended borders */
+    height: 3px;
+    border-radius: 1.5px;
+}
+
+QSlider::handle:horizontal {
+    background: #edf6f9;  /* Light teal handle */
+    border: 2px solid #004c4f;  /* Dark teal border */
+    width: 10px;   /* Slightly larger for better visibility */
+    height: 10px;  /* Adjusted for better UI */
+    border-radius: 5px;  /* Keeps it rounded */
+    margin: -4px 0;  /* Centering the handle */
+}
+
+QSlider::handle:horizontal:hover {
+    background: #b0d0c4; /* Light teal-gray for hover effect */
+}
+
+QSlider::handle:horizontal:pressed {
+    background: #8ca8a0; /* Slightly darker teal-gray for pressed effect */
+}
+</string>
+                   </property>
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="therolding_value_label">
+                   <property name="maximumSize">
+                    <size>
+                     <width>50</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">background-color: #006d77;
+color:#edf6f9;
+font-size: 16px;
+font-weight:500;
+border: None;</string>
+                   </property>
+                   <property name="text">
+                    <string>1</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </item>
+             <item row="0" column="1">
+              <layout class="QVBoxLayout" name="verticalLayout_6">
+               <property name="leftMargin">
+                <number>20</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="label_5">
+                 <property name="styleSheet">
+                  <string notr="true">background-color: #006d77;
+color:#edf6f9;
+font-size: 16px;
+font-weight:500;
+border: None;</string>
+                 </property>
+                 <property name="text">
+                  <string>Threshold Type:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="threshold_type">
+                 <property name="styleSheet">
+                  <string notr="true">QComboBox {
+    color: #edf6f9; /* Teal green text color */
+    font-size: 18px;
+    background-color: #006d77; /* Teal background */
+    padding: 5px 15px; /* Adjusted padding for consistency */
+    border: 1px solid #edf6f9; /* Teal green border */
+    border-radius: 8px; /* Rounded corners */
+}
+
+/* Drop-down list styling */
+QComboBox QAbstractItemView {
+    background-color: #006d77; /* Light cyan background */
+    color: #edf6f9; /* Teal green text for readability */
+    selection-background-color: #004c4f;  /* Soft teal highlight background */
+    selection-color: #ffffff; /* White text for better contrast */
+    border: 1px solid #edf6f9;
+    border-radius: 5px;
+}
+
+/* Drop-down button */
+QComboBox::drop-down {
+    width: 20px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-left: 1px solid #d9f2f3; /* Softer teal for separation */
+    /* background-color: #004c4f; /* Light teal background */
+}
+
+/* Drop-down arrow */
+QComboBox::down-arrow {
+    image: url(icons_setup/icons/down.png); /* Ensure file path is correct */
+    width: 12px;
+    height: 12px;
+}
+</string>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>Manual thresholding</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Otsu thresholding</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Spectral thresholding</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Optimal thresholding</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="0" column="2">
+              <layout class="QHBoxLayout" name="horizontalLayout_4">
+               <property name="spacing">
+                <number>6</number>
+               </property>
+               <property name="leftMargin">
+                <number>30</number>
+               </property>
+               <property name="topMargin">
+                <number>30</number>
+               </property>
+               <item>
+                <widget class="QRadioButton" name="local_thresholding">
+                 <property name="styleSheet">
+                  <string notr="true">QRadioButton {
+    font: bold 14px;
+    color: #edf6f9; /* Teal green text */
+    spacing: 8px;
+    border: transparent;
+}
+
+QRadioButton::indicator {
+    width: 16px; /* Slightly larger for a more modern look */
+    height: 16px;
+    border-radius: 10px; /* Ensures the indicator is a circle */
+}
+
+QRadioButton::indicator::unchecked {
+    border: 2px solid #edf6f9;
+    background-color: #006d77;
+    border-radius: 10px;
+}
+
+QRadioButton::indicator::checked {
+    border: 2px solid #edf6f9;
+    background-color: #edf6f9;
+    border-radius: 10px;
+}
+</string>
+                 </property>
+                 <property name="text">
+                  <string>Local</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="global_thresholding">
+                 <property name="styleSheet">
+                  <string notr="true">QRadioButton {
+    font: bold 14px;
+    color: #edf6f9; /* Teal green text */
+    spacing: 8px;
+    border: transparent;
+}
+
+QRadioButton::indicator {
+    width: 16px; /* Slightly larger for a more modern look */
+    height: 16px;
+    border-radius: 10px; /* Ensures the indicator is a circle */
+}
+
+QRadioButton::indicator::unchecked {
+    border: 2px solid #edf6f9;
+    background-color: #006d77;
+    border-radius: 10px;
+}
+
+QRadioButton::indicator::checked {
+    border: 2px solid #edf6f9;
+    background-color: #edf6f9;
+    border-radius: 10px;
+}
+</string>
+                 </property>
+                 <property name="text">
+                  <string>Global</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="0" column="0">
+              <layout class="QVBoxLayout" name="verticalLayout_10">
+               <property name="leftMargin">
+                <number>5</number>
+               </property>
+               <property name="topMargin">
+                <number>30</number>
+               </property>
+               <property name="rightMargin">
+                <number>5</number>
+               </property>
+               <item>
+                <widget class="QPushButton" name="browse">
+                 <property name="minimumSize">
+                  <size>
+                   <width>200</width>
+                   <height>35</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>200</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color:#edf6f9;
+border-radius: 5px;
+color:#006d77;
+font-size: 16px;
+font-weight:500;</string>
+                 </property>
+                 <property name="text">
+                  <string>Browse</string>
+                 </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>icons_setup/icons/image.png</normaloff>icons_setup/icons/image.png</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>22</width>
+                   <height>22</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="segmentation_page">
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QWidget" name="widget_2" native="true">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>90</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border: 1px solid #edf6f9;
+border-radius: 10px;</string>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_7">
+             <item>
+              <layout class="QVBoxLayout" name="verticalLayout_11">
+               <property name="topMargin">
+                <number>30</number>
+               </property>
+               <item>
+                <widget class="QPushButton" name="browse_segmentation">
+                 <property name="minimumSize">
+                  <size>
+                   <width>200</width>
+                   <height>35</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>200</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color:#edf6f9;
+border-radius: 5px;
+color:#006d77;
+font-size: 16px;
+font-weight:500;</string>
+                 </property>
+                 <property name="text">
+                  <string>Browse</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QVBoxLayout" name="verticalLayout_9">
+               <property name="spacing">
+                <number>10</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="label_6">
+                 <property name="styleSheet">
+                  <string notr="true">background-color: #006d77;
+color:#edf6f9;
+font-size: 16px;
+font-weight:500;
+border: None;</string>
+                 </property>
+                 <property name="text">
+                  <string>Segmentation Type:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="segmentationtype">
+                 <property name="maximumSize">
+                  <size>
+                   <width>300</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QComboBox {
+    color: #edf6f9; /* Teal green text color */
+    font-size: 18px;
+    background-color: #006d77; /* Teal background */
+    padding: 5px 15px; /* Adjusted padding for consistency */
+    border: 1px solid #edf6f9; /* Teal green border */
+    border-radius: 8px; /* Rounded corners */
+}
+
+/* Drop-down list styling */
+QComboBox QAbstractItemView {
+    background-color: #006d77; /* Light cyan background */
+    color: #edf6f9; /* Teal green text for readability */
+    selection-background-color: #004c4f;  /* Soft teal highlight background */
+    selection-color: #ffffff; /* White text for better contrast */
+    border: 1px solid #edf6f9;
+    border-radius: 5px;
+}
+
+/* Drop-down button */
+QComboBox::drop-down {
+    width: 20px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-left: 1px solid #d9f2f3; /* Softer teal for separation */
+    /* background-color: #004c4f; /* Light teal background */
+}
+
+/* Drop-down arrow */
+QComboBox::down-arrow {
+    image: url(icons_setup/icons/down.png); /* Ensure file path is correct */
+    width: 12px;
+    height: 12px;
+}
+</string>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>K-nearest neighbor (KNN)</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Mean shifting</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Region growing</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Agglomerative</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QVBoxLayout" name="verticalLayout_7">
+               <item>
+                <widget class="QLabel" name="label_8">
+                 <property name="maximumSize">
+                  <size>
+                   <width>200</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color: #006d77;
+color:#edf6f9;
+font-size: 16px;
+font-weight:500;
+border: None;</string>
+                 </property>
+                 <property name="text">
+                  <string>Max no. of iterations:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_6">
+                 <item>
+                  <widget class="QSlider" name="iterations_slider">
+                   <property name="maximumSize">
+                    <size>
+                     <width>200</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">QSlider {
+    border: none;  /* Ensure no border is applied to the entire slider */
+    background: transparent;  /* Avoid unwanted background effects */
+}
+
+QSlider::groove:horizontal {
+    border: none;  /* Remove the border */
+    background: #004c4f;  /* White track */
+    height: 5px;
+    border-radius: 1.5px;
+}
+
+QSlider::sub-page:horizontal {
+    background: #edf6f9;  /* Light teal progress */
+    border: none;  /* Remove any unintended borders */
+    height: 3px;
+    border-radius: 1.5px;
+}
+
+QSlider::add-page:horizontal {
+    background: #ffffff;  /* Dark teal for remaining track */
+    border: none;  /* Remove any unintended borders */
+    height: 3px;
+    border-radius: 1.5px;
+}
+
+QSlider::handle:horizontal {
+    background: #edf6f9;  /* Light teal handle */
+    border: 2px solid #004c4f;  /* Dark teal border */
+    width: 10px;   /* Slightly larger for better visibility */
+    height: 10px;  /* Adjusted for better UI */
+    border-radius: 5px;  /* Keeps it rounded */
+    margin: -4px 0;  /* Centering the handle */
+}
+
+QSlider::handle:horizontal:hover {
+    background: #b0d0c4; /* Light teal-gray for hover effect */
+}
+
+QSlider::handle:horizontal:pressed {
+    background: #8ca8a0; /* Slightly darker teal-gray for pressed effect */
+}
+</string>
+                   </property>
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="iterations_label">
+                   <property name="maximumSize">
+                    <size>
+                     <width>50</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">background-color: #006d77;
+color:#edf6f9;
+font-size: 16px;
+font-weight:500;
+border: None;</string>
+                   </property>
+                   <property name="text">
+                    <string>1</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QVBoxLayout" name="verticalLayout_4">
+               <property name="topMargin">
+                <number>30</number>
+               </property>
+               <item>
+                <widget class="QPushButton" name="apply_segmentation_button">
+                 <property name="minimumSize">
+                  <size>
+                   <width>200</width>
+                   <height>35</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>200</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color:#edf6f9;
+border-radius: 5px;
+color:#006d77;
+font-size: 16px;
+font-weight:500;</string>
+                 </property>
+                 <property name="text">
+                  <string>Apply</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+      <item>
        <layout class="QHBoxLayout" name="horizontalLayout_11">
         <property name="rightMargin">
          <number>0</number>
@@ -326,349 +981,6 @@ border-radius: 5px;</string>
          </layout>
         </item>
        </layout>
-      </item>
-      <item>
-       <widget class="QStackedWidget" name="stackedWidget">
-        <property name="currentIndex">
-         <number>0</number>
-        </property>
-        <widget class="QWidget" name="page">
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
-          <item>
-           <widget class="QWidget" name="widget_3" native="true">
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>100</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">border: 1px solid #edf6f9;
-border-radius: 10px;</string>
-            </property>
-            <layout class="QGridLayout" name="gridLayout">
-             <item row="0" column="4">
-              <layout class="QVBoxLayout" name="verticalLayout_13">
-               <property name="topMargin">
-                <number>30</number>
-               </property>
-               <item>
-                <widget class="QPushButton" name="apply_button">
-                 <property name="minimumSize">
-                  <size>
-                   <width>200</width>
-                   <height>35</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>200</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">background-color:#edf6f9;
-border-radius: 5px;
-color:#006d77;
-font-size: 16px;
-font-weight:500;</string>
-                 </property>
-                 <property name="text">
-                  <string>Apply</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item row="0" column="3">
-              <layout class="QVBoxLayout" name="verticalLayout_8">
-               <property name="rightMargin">
-                <number>20</number>
-               </property>
-               <item>
-                <widget class="QLabel" name="label_7">
-                 <property name="styleSheet">
-                  <string notr="true">background-color: #006d77;
-color:#edf6f9;
-font-size: 16px;
-font-weight:500;
-border: None;</string>
-                 </property>
-                 <property name="text">
-                  <string>Threshold value:</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QSlider" name="horizontalSlider">
-                 <property name="maximumSize">
-                  <size>
-                   <width>250</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">QSlider {
-    border: none;  /* Ensure no border is applied to the entire slider */
-    background: transparent;  /* Avoid unwanted background effects */
-}
-
-QSlider::groove:horizontal {
-    border: none;  /* Remove the border */
-    background: #004c4f;  /* White track */
-    height: 5px;
-    border-radius: 1.5px;
-}
-
-QSlider::sub-page:horizontal {
-    background: #edf6f9;  /* Light teal progress */
-    border: none;  /* Remove any unintended borders */
-    height: 3px;
-    border-radius: 1.5px;
-}
-
-QSlider::add-page:horizontal {
-    background: #ffffff;  /* Dark teal for remaining track */
-    border: none;  /* Remove any unintended borders */
-    height: 3px;
-    border-radius: 1.5px;
-}
-
-QSlider::handle:horizontal {
-    background: #edf6f9;  /* Light teal handle */
-    border: 2px solid #004c4f;  /* Dark teal border */
-    width: 10px;   /* Slightly larger for better visibility */
-    height: 10px;  /* Adjusted for better UI */
-    border-radius: 5px;  /* Keeps it rounded */
-    margin: -4px 0;  /* Centering the handle */
-}
-
-QSlider::handle:horizontal:hover {
-    background: #b0d0c4; /* Light teal-gray for hover effect */
-}
-
-QSlider::handle:horizontal:pressed {
-    background: #8ca8a0; /* Slightly darker teal-gray for pressed effect */
-}
-</string>
-                 </property>
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item row="0" column="1">
-              <layout class="QVBoxLayout" name="verticalLayout_6">
-               <property name="leftMargin">
-                <number>20</number>
-               </property>
-               <item>
-                <widget class="QLabel" name="label_5">
-                 <property name="styleSheet">
-                  <string notr="true">background-color: #006d77;
-color:#edf6f9;
-font-size: 16px;
-font-weight:500;
-border: None;</string>
-                 </property>
-                 <property name="text">
-                  <string>Threshold Type:</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QComboBox" name="operator_selector">
-                 <property name="styleSheet">
-                  <string notr="true">QComboBox {
-    color: #edf6f9; /* Teal green text color */
-    font-size: 18px;
-    background-color: #006d77; /* Teal background */
-    padding: 5px 15px; /* Adjusted padding for consistency */
-    border: 1px solid #edf6f9; /* Teal green border */
-    border-radius: 8px; /* Rounded corners */
-}
-
-/* Drop-down list styling */
-QComboBox QAbstractItemView {
-    background-color: #006d77; /* Light cyan background */
-    color: #edf6f9; /* Teal green text for readability */
-    selection-background-color: #004c4f;  /* Soft teal highlight background */
-    selection-color: #ffffff; /* White text for better contrast */
-    border: 1px solid #edf6f9;
-    border-radius: 5px;
-}
-
-/* Drop-down button */
-QComboBox::drop-down {
-    width: 20px;
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-    border-left: 1px solid #d9f2f3; /* Softer teal for separation */
-    /* background-color: #004c4f; /* Light teal background */
-}
-
-/* Drop-down arrow */
-QComboBox::down-arrow {
-    image: url(icons_setup/icons/down.png); /* Ensure file path is correct */
-    width: 12px;
-    height: 12px;
-}
-</string>
-                 </property>
-                 <item>
-                  <property name="text">
-                   <string>Harris</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Lambda</string>
-                  </property>
-                 </item>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item row="0" column="2">
-              <layout class="QVBoxLayout" name="verticalLayout_7">
-               <property name="leftMargin">
-                <number>20</number>
-               </property>
-               <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_4">
-                 <property name="spacing">
-                  <number>0</number>
-                 </property>
-                 <item>
-                  <widget class="QRadioButton" name="kernel_3x3_radio_button">
-                   <property name="styleSheet">
-                    <string notr="true">QRadioButton {
-    font: bold 14px;
-    color: #edf6f9; /* Teal green text */
-    spacing: 8px;
-    border: transparent;
-}
-
-QRadioButton::indicator {
-    width: 16px; /* Slightly larger for a more modern look */
-    height: 16px;
-    border-radius: 10px; /* Ensures the indicator is a circle */
-}
-
-QRadioButton::indicator::unchecked {
-    border: 2px solid #edf6f9;
-    background-color: #006d77;
-    border-radius: 10px;
-}
-
-QRadioButton::indicator::checked {
-    border: 2px solid #edf6f9;
-    background-color: #edf6f9;
-    border-radius: 10px;
-}
-</string>
-                   </property>
-                   <property name="text">
-                    <string>Local</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QRadioButton" name="kernel_5x5_radio_button">
-                   <property name="styleSheet">
-                    <string notr="true">QRadioButton {
-    font: bold 14px;
-    color: #edf6f9; /* Teal green text */
-    spacing: 8px;
-    border: transparent;
-}
-
-QRadioButton::indicator {
-    width: 16px; /* Slightly larger for a more modern look */
-    height: 16px;
-    border-radius: 10px; /* Ensures the indicator is a circle */
-}
-
-QRadioButton::indicator::unchecked {
-    border: 2px solid #edf6f9;
-    background-color: #006d77;
-    border-radius: 10px;
-}
-
-QRadioButton::indicator::checked {
-    border: 2px solid #edf6f9;
-    background-color: #edf6f9;
-    border-radius: 10px;
-}
-</string>
-                   </property>
-                   <property name="text">
-                    <string>Global</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-              </layout>
-             </item>
-             <item row="0" column="0">
-              <layout class="QVBoxLayout" name="verticalLayout_10">
-               <property name="leftMargin">
-                <number>5</number>
-               </property>
-               <property name="topMargin">
-                <number>30</number>
-               </property>
-               <property name="rightMargin">
-                <number>5</number>
-               </property>
-               <item>
-                <widget class="QPushButton" name="browse">
-                 <property name="minimumSize">
-                  <size>
-                   <width>200</width>
-                   <height>35</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>200</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">background-color:#edf6f9;
-border-radius: 5px;
-color:#006d77;
-font-size: 16px;
-font-weight:500;</string>
-                 </property>
-                 <property name="text">
-                  <string>Browse</string>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>icons_setup/icons/image.png</normaloff>icons_setup/icons/image.png</iconset>
-                 </property>
-                 <property name="iconSize">
-                  <size>
-                   <width>22</width>
-                   <height>22</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-            </layout>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="page_2"/>
-       </widget>
       </item>
      </layout>
     </item>
