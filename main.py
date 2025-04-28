@@ -109,17 +109,17 @@ class MainWindow(QMainWindow):
             slider_label.setText("kernel size")
             self.segmentation_slider.setMaximum(300)
             self.output_viewer.current_segmentation_mode = SegmentationType.MEAN_SHIFT
-            pass #write your code here
+            pass #write your code her
         
         elif text == 'Region growing':
             slider_label.setText("Max no. of iterations:")
             self.output_viewer.current_segmentation_mode = SegmentationType.REGION_GROWING
-            pass #write your code here
+            pass #write your code her
         
         else:
             slider_label.setText("Max no. of iterations:")
             self.output_viewer.current_segmentation_mode = SegmentationType.AGGLOMERATIVE
-            pass #write your code here
+            pass #write your code her
         
     def on_apply_button_clicked(self):
         text = self.segmentation_combobox.currentText()
@@ -127,12 +127,12 @@ class MainWindow(QMainWindow):
             pass
         elif text == 'Mean shifting':
             self.mean_shift_segmenter.apply_mean_shift(self.segmentation_slider.value())
-            pass #write your code here
+            pass #write your code her
         
         elif text == 'Region growing':
-            pass #write your code here
+            pass #write your code her
         else:
-            pass #write your code here
+            pass #write your code her
         self.controller.update()
 
 
