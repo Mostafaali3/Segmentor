@@ -44,7 +44,7 @@ class MainWindow(QMainWindow):
         self.browse_button = self.findChild(QPushButton, "browse")
         self.browse_button.clicked.connect(self.browse_)
         
-        self.segmentation_combobox = self.findChild(QComboBox, "segmentationtype")
+        self.segmentation_combobox = self.findChild(QComboBox, "segmentation_type")
         self.segmentation_combobox.currentIndexChanged.connect(self.on_segmentation_combobox_index_changed)
         
         self.apply_segmentation_button = self.findChild(QPushButton, "apply_segmentation_button")
