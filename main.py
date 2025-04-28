@@ -48,6 +48,14 @@ class MainWindow(QMainWindow):
         
         self.segmentation_browse_button = self.findChild(QPushButton, "browse_segmentation")
         self.segmentation_browse_button.clicked.connect(self.browse_)
+        
+        self.segmentation_slider_counter_label = self.findChild(QLabel, "iterations_label")
+        
+        self.segmentation_slider = self.findChild(QSlider, "iterations_slider")
+        self.segmentation_slider.valueChanged.connect(self.on_segmentation_slider_value_changed)
+        
+        self.reset_button = self.findChild(QPushButton, "pushButton_2")
+        self.reset_button.clicked.connect(self.reset)
 
 
         
@@ -56,6 +64,9 @@ class MainWindow(QMainWindow):
         self.modes_stacked_widget.setCurrentIndex(0)
     def on_segmentation_mode_button_pressed(self):
         self.modes_stacked_widget.setCurrentIndex(1)
+        
+    def on_segmentation_slider_value_changed(self):
+        self.segmentation_slider_counter_label.setText(f"{self.segmentation_slider.value()}")
         
     def on_segmentation_combobox_index_changed(self):
         '''
@@ -69,6 +80,8 @@ class MainWindow(QMainWindow):
 
         elif text == 'Mean shifting':
             slider_label.setText("kernel size")
+            self.segmentation_slider.setMaximum(300)
+            
             pass #write your code here
         
         elif text == 'Region growing':
@@ -84,7 +97,7 @@ class MainWindow(QMainWindow):
         if text == 'K-nearest neighbor (KNN)':
             pass
         elif text == 'Mean shifting':
-            self.mean_shift_segmenter.apply_mean_shift(50)
+            self.mean_shift_segmenter.apply_mean_shift(self.segmentation_slider.value())
             pass #write your code here
         
         elif text == 'Region growing':
@@ -103,8 +116,9 @@ class MainWindow(QMainWindow):
                 self.output_viewer.current_image = image
                 self.controller.update()
         
-        
-        
+    def reset(self):
+        self.output_viewer.current_image.reset()
+        self.controller.update()
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = MainWindow()

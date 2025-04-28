@@ -21,6 +21,7 @@ class ImageViewer(pg.ImageView):
             view = self.getView()
             if self.viewer_type == ViewerType.INPUT:
                 self.setImage(cv2.transpose(self.current_image.original_image))
+                view.setLimits(xMin = 0, xMax=self.current_image.original_image.shape[1], yMin = 0, yMax = self.current_image.original_image.shape[0])
             elif self.viewer_type == ViewerType.OUTPUT:
                 self.setImage(cv2.transpose(self.current_image.modified_image))
-            view.setLimits(xMin = 0, xMax=self.current_image.original_image.shape[1], yMin = 0, yMax = self.current_image.original_image.shape[0])
+                view.setLimits(xMin = 0, xMax=self.current_image.modified_image.shape[1], yMin = 0, yMax = self.current_image.modified_image.shape[0])
