@@ -8,6 +8,8 @@ class Optimal_thresholding():
 
     def apply_optimal_thresholding(self, image):
         if self.output_image_viewer.current_image is not None:
+            if len(image.shape) == 3:
+                print("img is not gray")
             # # conversion to gray
             # if len(self.output_image_viewer.current_image.modified_image.shape) == 3:
             #     self.output_image_viewer.current_image.transfer_to_gray_scale()
@@ -32,7 +34,7 @@ class Optimal_thresholding():
                     # background
                     else:
                         background_sum += i* pdf[i]
-                        object_cdf += pdf[i]
+                        background_cdf += pdf[i]
 
                 # mean = weighted sum / cumulative probability
                 background_mean = background_sum / max(background_cdf, 1e-10) if background_cdf > 0 else 0
@@ -46,7 +48,7 @@ class Optimal_thresholding():
 
 
     def compute_initial_threshold(self, image):
-        height, width = self.output_image_viewer.current_image.modified_image.shape
+        height, width = image.shape
         # corner pixel intensities
         corner_pixels = [
             image[0,0],
