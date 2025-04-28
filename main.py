@@ -10,6 +10,7 @@ from classes.image_viewer import ImageViewer
 from enums.viewerType import ViewerType
 from classes.controller import Controller
 import cv2
+from classes.meanShiftSegmenter import MeanShiftSegmenter
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -43,6 +44,11 @@ class MainWindow(QMainWindow):
         self.apply_segmentation_button = self.findChild(QPushButton, "apply_segmentation_button")
         self.apply_segmentation_button.clicked.connect(self.on_apply_button_clicked)
         
+        self.mean_shift_segmenter = MeanShiftSegmenter(self.input_viewer, self.output_viewer)
+        
+        self.segmentation_browse_button = self.findChild(QPushButton, "browse_segmentation")
+        self.segmentation_browse_button.clicked.connect(self.browse_)
+        
         
     def on_threshold_mode_button_pressed(self):
         self.modes_stacked_widget.setCurrentIndex(0)
@@ -74,9 +80,9 @@ class MainWindow(QMainWindow):
     def on_apply_button_clicked(self):
         text = self.segmentation_combobox.currentText()
         if text == 'K-nearest neighbor (KNN)':
-            print
+            pass
         elif text == 'Mean shifting':
-            print(1)
+            self.mean_shift_segmenter.apply_mean_shift(30)
             pass #write your code here
         
         elif text == 'Region growing':
