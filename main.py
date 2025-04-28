@@ -48,6 +48,8 @@ class MainWindow(QMainWindow):
         
         self.segmentation_browse_button = self.findChild(QPushButton, "browse_segmentation")
         self.segmentation_browse_button.clicked.connect(self.browse_)
+
+
         
         
     def on_threshold_mode_button_pressed(self):
