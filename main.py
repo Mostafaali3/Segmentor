@@ -11,6 +11,7 @@ from enums.viewerType import ViewerType
 from classes.controller import Controller
 import cv2
 from classes.meanShiftSegmenter import MeanShiftSegmenter
+from classes.thresholder import Thresholder
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -48,6 +49,21 @@ class MainWindow(QMainWindow):
         
         self.segmentation_browse_button = self.findChild(QPushButton, "browse_segmentation")
         self.segmentation_browse_button.clicked.connect(self.browse_)
+
+
+        # tresholding stuff (7ad yefkarny amsa7 el comment da)
+        self.apply_thresholding_button = self.findChild(QPushButton, "apply_threshold")
+        self.apply_thresholding_button.clicked.connect(self.apply_thresholding)
+        self.thresholder = Thresholder(self.output_viewer)
+        self.threshold_type = None
+
+        self.local_threshold = self.findChild(QRadioButton, "local_thresholding")
+        self.global_threshold = self.findChild(QRadioButton, "global_thresholding")
+
+        self.local_threshold.toggled.connect(self.on_threshold_selected)
+        self.global_threshold.toggled.connect(self.on_threshold_selected)
+
+        self.thresholding_method_selector = self.findChild(QComboBox, 'threshold_type')
 
 
         
@@ -92,6 +108,25 @@ class MainWindow(QMainWindow):
         else:
             pass #write your code here
         self.controller.update()
+
+
+    def apply_thresholding(self):
+        thresholding_method = self.thresholding_method_selector.currentText()
+        print(f"thresh type {self.threshold_type}")
+        print(f"thresh method {thresholding_method}")
+
+    def on_threshold_selected(self):
+        # never calling it twice
+        if self.sender().isChecked():
+            if self.sender() == self.local_threshold:
+                self.threshold_type = "LOCAL"
+                self.thresholder.check_global_selection = False
+            elif self.sender() == self.global_threshold:
+                self.threshold_type = "GLOBAL"
+                self.thresholder.check_global_selection = True
+
+
+
         
     def browse_(self):
         file_path, _ = QFileDialog.getOpenFileName(self, 'Open Image File', '', 'Image Files (*.jpeg *.jpg *.png *.JPG);;All Files (*)')
