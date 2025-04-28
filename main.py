@@ -37,11 +37,14 @@ class MainWindow(QMainWindow):
         self.browse_button = self.findChild(QPushButton, "browse")
         self.browse_button.clicked.connect(self.browse_)
         
-        self.segmentation_combobox = self.findChild(QComboBox, "segmentationtype")
+        self.segmentation_combobox = self.findChild(QComboBox, "segmentation_type")
         self.segmentation_combobox.currentIndexChanged.connect(self.on_segmentation_combobox_index_changed)
         
         self.apply_segmentation_button = self.findChild(QPushButton, "apply_segmentation_button")
         self.apply_segmentation_button.clicked.connect(self.on_apply_button_clicked)
+
+        self.iterations_slider = self.findChild(QSlider, 'iterations_slider')
+        self.iterations_label = self.findChild(QLabel, "iterations_label")
         
         
     def on_threshold_mode_button_pressed(self):
@@ -60,11 +63,11 @@ class MainWindow(QMainWindow):
             slider_label.setText("Max no. of iterations:")
 
         elif text == 'Mean shifting':
-            slider_label.setText("kernel size")
+            slider_label.setText("kernel size:")
             pass #write your code here
         
         elif text == 'Region growing':
-            slider_label.setText("Max no. of iterations:")
+            slider_label.setText("Threshold:")
             pass #write your code here
         
         else:
@@ -84,7 +87,8 @@ class MainWindow(QMainWindow):
         else:
             pass #write your code here
         self.controller.update()
-        
+
+
     def browse_(self):
         file_path, _ = QFileDialog.getOpenFileName(self, 'Open Image File', '', 'Image Files (*.jpeg *.jpg *.png *.JPG);;All Files (*)')
         if file_path:

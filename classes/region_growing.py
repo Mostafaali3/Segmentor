@@ -3,11 +3,23 @@ import collections
 import cv2
 import numpy
 import numpy as np
+from PyQt5 import Qt
+from PyQt5.QtGui import QPainter, QPen
 
 
 class region_growing():
     def __init__(self, output_image_viewer):
         self.output_image_viewer = output_image_viewer
+
+    def paintEvent(self):
+        painter = QPainter(self)
+
+        # If a point is selected, draw a small circle
+        if self.clicked_point:
+            painter.setPen(QPen(Qt.red, 5))  # Red color, 5px width
+            x, y = self.clicked_point
+            painter.drawEllipse(x - 3, y - 3, 6, 6)  # Small circle centered at (x,y)
+
     def apply_region_growing(self, seed, threshold):
         if self.output_image_viewer.current_image is not None:
             height, width = self.output_image_viewer.current_image.modified_image.shape
