@@ -84,10 +84,4 @@ class Thresholder():
         self.output_image_viewer.current_image.modified_image = np.array(imported_image_gray_scale, dtype=np.uint8)
         print("img is now gray")
 
-    # def compute_histogram(self):
-    #     # creates a 1d arr hist of size 256
-    #     hist = np.zeros(256, dtype=np.float32)
-    #     for pixel in self.output_image_viewer.current_image.modified_image.flatten():
-    #         hist[int(pixel)] += 1
-    #     hist = hist / np.sum(hist)
-    #     return hist
+
