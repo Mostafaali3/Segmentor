@@ -82,7 +82,7 @@ class MainWindow(QMainWindow):
         if text == 'K-nearest neighbor (KNN)':
             pass
         elif text == 'Mean shifting':
-            self.mean_shift_segmenter.apply_mean_shift(30)
+            self.mean_shift_segmenter.apply_mean_shift(50)
             pass #write your code here
         
         elif text == 'Region growing':

@@ -8,9 +8,9 @@ class MeanShiftSegmenter():
         self.input_viewer = input_viewer
         self.output_viewer = output_viewer
         
-    def apply_mean_shift(self, kernel_size=30, max_iters = 300, stop_thresh=1e-3):
+    def apply_mean_shift(self, kernel_size=40, max_iters = 300, stop_thresh=1e-3):
         image = copy(self.input_viewer.current_image.modified_image)
-        image = cv2.resize(image, (150,150))
+        image = cv2.resize(image, (100,100))
         features = []
         
         for y in range(image.shape[0]):
