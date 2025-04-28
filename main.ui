@@ -177,7 +177,7 @@ font-weight:500;</string>
       <item>
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="thresholding_page">
          <layout class="QHBoxLayout" name="horizontalLayout_3">

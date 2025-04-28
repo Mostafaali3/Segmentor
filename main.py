@@ -37,11 +37,53 @@ class MainWindow(QMainWindow):
         self.browse_button = self.findChild(QPushButton, "browse")
         self.browse_button.clicked.connect(self.browse_)
         
+        self.segmentation_combobox = self.findChild(QComboBox, "segmentationtype")
+        self.segmentation_combobox.currentIndexChanged.connect(self.on_segmentation_combobox_index_changed)
+        
+        self.apply_segmentation_button = self.findChild(QPushButton, "apply_segmentation_button")
+        self.apply_segmentation_button.clicked.connect(self.on_apply_button_clicked)
+        
         
     def on_threshold_mode_button_pressed(self):
         self.modes_stacked_widget.setCurrentIndex(0)
     def on_segmentation_mode_button_pressed(self):
         self.modes_stacked_widget.setCurrentIndex(1)
+        
+    def on_segmentation_combobox_index_changed(self):
+        '''
+        this function is for any changes in the inputs labels 
+        '''
+        
+        text = self.segmentation_combobox.currentText()
+        slider_label = self.findChild(QLabel, "label_8")
+        if text == 'K-nearest neighbor (KNN)':
+            slider_label.setText("Max no. of iterations:")
+
+        elif text == 'Mean shifting':
+            slider_label.setText("kernel size")
+            pass #write your code here
+        
+        elif text == 'Region growing':
+            slider_label.setText("Max no. of iterations:")
+            pass #write your code here
+        
+        else:
+            slider_label.setText("Max no. of iterations:")
+            pass #write your code here
+        
+    def on_apply_button_clicked(self):
+        text = self.segmentation_combobox.currentText()
+        if text == 'K-nearest neighbor (KNN)':
+            print
+        elif text == 'Mean shifting':
+            print(1)
+            pass #write your code here
+        
+        elif text == 'Region growing':
+            pass #write your code here
+        else:
+            pass #write your code here
+        self.controller.update()
         
     def browse_(self):
         file_path, _ = QFileDialog.getOpenFileName(self, 'Open Image File', '', 'Image Files (*.jpeg *.jpg *.png *.JPG);;All Files (*)')
