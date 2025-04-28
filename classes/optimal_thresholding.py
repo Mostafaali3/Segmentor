@@ -1,13 +1,10 @@
 import numpy as np
-from classes.thresholder import Thresholder
 
 
 class Optimal_thresholding():
     def __init__(self, output_image_viewer):
         self.output_image_viewer = output_image_viewer
         self.epsilon = 0.002
-        self.thresholder = Thresholder(self.output_image_viewer)
-
 
     def apply_optimal_thresholding(self, threshold_type):
         if self.output_image_viewer.current_image is not None:
@@ -17,7 +14,7 @@ class Optimal_thresholding():
 
             # starting with initial threshold
             current_thresh = self.compute_initial_threshold()
-            pdf = self.thresholder.compute_histogram()
+            pdf = self.compute_histogram()
 
             # breaks when convergence is achieved
             while True:
@@ -43,8 +40,8 @@ class Optimal_thresholding():
 
                 new_thresh = (background_mean + object_mean) / 2
                 if abs(current_thresh - new_thresh) < self.epsilon:
-                    self.thresholder.apply_thresholding(threshold_type, current_thresh)
-                    break
+                    # self.thresholder.apply_thresholding(threshold_type, current_thresh)
+                    return current_thresh
                 current_thresh = new_thresh
 
 
@@ -60,6 +57,14 @@ class Optimal_thresholding():
 
         init_thresh = np.mean(corner_pixels)
         return init_thresh
+
+    def compute_histogram(self):
+        # creates a 1d arr hist of size 256
+        hist = np.zeros(256, dtype=np.float32)
+        for pixel in self.output_image_viewer.current_image.modified_image.flatten():
+            hist[int(pixel)] += 1
+        hist = hist / np.sum(hist)
+        return hist
 
 
 

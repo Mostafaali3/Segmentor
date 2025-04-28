@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from classes.optimal_thresholding import Optimal_thresholding
 
 
 class Thresholder():
