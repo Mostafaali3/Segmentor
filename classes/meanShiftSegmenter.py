@@ -1,7 +1,7 @@
 from classes.image_viewer import ImageViewer
 import numpy as np
 import cv2
-
+from copy import copy
 
 class MeanShiftSegmenter():
     def __init__(self, input_viewer:ImageViewer, output_viewer:ImageViewer):
@@ -9,8 +9,8 @@ class MeanShiftSegmenter():
         self.output_viewer = output_viewer
         
     def apply_mean_shift(self, kernel_size=30, max_iters = 300, stop_thresh=1e-3):
-        image = self.input_viewer.current_image.modified_image
-        image = cv2.resize(image, (64,64))
+        image = copy(self.input_viewer.current_image.modified_image)
+        image = cv2.resize(image, (150,150))
         features = []
         
         for y in range(image.shape[0]):
@@ -19,23 +19,27 @@ class MeanShiftSegmenter():
         features = np.array(features)
         feature_points =np.copy(features)
         shifted_points = np.zeros_like(feature_points)
-        
+        print(feature_points[0])
         for i, point in enumerate(feature_points):
             mean = point
             for _ in range(max_iters):
-                distances = np.linalg.norm(features-mean)
+                distances = np.linalg.norm(features-mean, axis=1)
                 within_distance = features[distances < kernel_size]    
                 
                 if len(within_distance) == 0:
                     break
                 
-                new_mean = np.mean(within_distance)
+                new_mean = np.mean(within_distance, axis=0)
                 
-                shift = np.linalg.norm(new_mean, mean)
+                shift = np.linalg.norm(new_mean- mean)
                 if shift < stop_thresh:
                     break
                 
                 mean = new_mean
             shifted_points[i] = mean
+            
+            
+        image = shifted_points[:, :3].reshape(image.shape[0], image.shape[1], 3)
+        self.input_viewer.current_image.modified_image = image
         
-        
+        print(shifted_points[0])
