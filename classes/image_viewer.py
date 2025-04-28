@@ -2,6 +2,8 @@ import pyqtgraph as pg
 from enums.viewerType import ViewerType
 from PyQt5.QtWidgets import QFileDialog
 import cv2
+from enums.mode import Mode
+from enums.segmentationType import SegmentationType
 
 
 class ImageViewer(pg.ImageView):
@@ -14,6 +16,8 @@ class ImageViewer(pg.ImageView):
         self.getView().setAspectLocked(False)
         self.current_image = None
         self.viewer_type = None
+        self.current_mode = None
+        self.current_segmentation_mode = None
         
     def update_plot(self):
         if self.current_image is not None:
@@ -21,6 +25,7 @@ class ImageViewer(pg.ImageView):
             view = self.getView()
             if self.viewer_type == ViewerType.INPUT:
                 self.setImage(cv2.transpose(self.current_image.original_image))
+                view.setLimits(xMin = 0, xMax=self.current_image.original_image.shape[1], yMin = 0, yMax = self.current_image.original_image.shape[0])
             elif self.viewer_type == ViewerType.OUTPUT:
                 self.setImage(cv2.transpose(self.current_image.modified_image))
-            view.setLimits(xMin = 0, xMax=self.current_image.original_image.shape[1], yMin = 0, yMax = self.current_image.original_image.shape[0])
+                view.setLimits(xMin = 0, xMax=self.current_image.modified_image.shape[1], yMin = 0, yMax = self.current_image.modified_image.shape[0])

@@ -177,7 +177,7 @@ font-weight:500;</string>
       <item>
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="thresholding_page">
          <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -615,7 +615,7 @@ border: None;</string>
                 </widget>
                </item>
                <item>
-                <widget class="QComboBox" name="segmentationtype">
+                <widget class="QComboBox" name="segmentation_type">
                  <property name="maximumSize">
                   <size>
                    <width>300</width>

@@ -25,11 +25,11 @@ class MeanShiftSegmenter():
             for _ in range(max_iters):
                 distances = np.linalg.norm(features-mean, axis=1)
                 within_distance = features[distances < kernel_size]    
-                
+                within_distances = distances[distances < kernel_size]
                 if len(within_distance) == 0:
                     break
-                
-                new_mean = np.mean(within_distance, axis=0)
+                weights = np.exp(-(within_distances**2) / (2 * (kernel_size**2)))
+                new_mean = np.average(within_distance, axis=0, weights=weights)
                 
                 shift = np.linalg.norm(new_mean- mean)
                 if shift < stop_thresh:
