@@ -12,6 +12,8 @@ from classes.controller import Controller
 import cv2
 from classes.meanShiftSegmenter import MeanShiftSegmenter
 from classes.thresholder import Thresholder
+from enums.mode import Mode
+from enums.segmentationType import SegmentationType
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -27,6 +29,9 @@ class MainWindow(QMainWindow):
         self.output_viewer = ImageViewer()
         self.output_viewer.viewer_type = ViewerType.OUTPUT
         self.output_viewer_layout.addWidget(self.output_viewer)
+        
+        self.input_viewer.current_mode = Mode.SEGMENTATION
+        self.output_viewer.current_mode = Mode.SEGMENTATION
         
         self.threshold_button = self.findChild(QPushButton, "thresholding_button")
         self.threshold_button.clicked.connect(self.on_threshold_mode_button_pressed)
@@ -78,8 +83,14 @@ class MainWindow(QMainWindow):
         
     def on_threshold_mode_button_pressed(self):
         self.modes_stacked_widget.setCurrentIndex(0)
+        self.input_viewer.current_mode = Mode.THRESHOLDING
+        self.output_viewer.current_mode = Mode.THRESHOLDING
+        
     def on_segmentation_mode_button_pressed(self):
         self.modes_stacked_widget.setCurrentIndex(1)
+        self.input_viewer.current_mode = Mode.SEGMENTATION
+        self.output_viewer.current_mode = Mode.SEGMENTATION
+        
         
     def on_segmentation_slider_value_changed(self):
         self.segmentation_slider_counter_label.setText(f"{self.segmentation_slider.value()}")
@@ -88,24 +99,26 @@ class MainWindow(QMainWindow):
         '''
         this function is for any changes in the inputs labels 
         '''
-        
         text = self.segmentation_combobox.currentText()
         slider_label = self.findChild(QLabel, "label_8")
         if text == 'K-nearest neighbor (KNN)':
             slider_label.setText("Max no. of iterations:")
+            self.output_viewer.current_segmentation_mode = SegmentationType.KNN
 
         elif text == 'Mean shifting':
             slider_label.setText("kernel size")
             self.segmentation_slider.setMaximum(300)
-            
+            self.output_viewer.current_segmentation_mode = SegmentationType.MEAN_SHIFT
             pass #write your code here
         
         elif text == 'Region growing':
             slider_label.setText("Max no. of iterations:")
+            self.output_viewer.current_segmentation_mode = SegmentationType.REGION_GROWING
             pass #write your code here
         
         else:
             slider_label.setText("Max no. of iterations:")
+            self.output_viewer.current_segmentation_mode = SegmentationType.AGGLOMERATIVE
             pass #write your code here
         
     def on_apply_button_clicked(self):
