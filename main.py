@@ -39,9 +39,9 @@ class MainWindow(QMainWindow):
         
         
     def on_threshold_mode_button_pressed(self):
-        self.modes_stacked_widget.currentIndex(0)
+        self.modes_stacked_widget.setCurrentIndex(0)
     def on_segmentation_mode_button_pressed(self):
-        self.modes_stacked_widget.currentIndex(1)
+        self.modes_stacked_widget.setCurrentIndex(1)
         
     def browse_(self):
         file_path, _ = QFileDialog.getOpenFileName(self, 'Open Image File', '', 'Image Files (*.jpeg *.jpg *.png *.JPG);;All Files (*)')

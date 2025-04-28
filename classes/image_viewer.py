@@ -7,7 +7,7 @@ import cv2
 class ImageViewer(pg.ImageView):
     def __init__(self):
         super().__init__()
-        self.getView().setBackgroundColor("#ed56f9")
+        self.getView().setBackgroundColor("#edf6f9")
         self.ui.histogram.hide()
         self.ui.roiBtn.hide()
         self.ui.menuBtn.hide()
