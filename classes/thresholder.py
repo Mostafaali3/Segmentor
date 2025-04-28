@@ -9,7 +9,7 @@ class Thresholder():
         self.check_global_selection = False
 
     def apply_thresholding(self, threshold_type, thersh_val):
-        # thesh_val passed 3la 7asb the method --> handle it later 
+        # thesh_val passed 3la 7asb the method --> handle it later
         if self.output_image_viewer.current_image is not None:
             if threshold_type == "LOCAL":
                 self.restore_original_img()
@@ -52,7 +52,15 @@ class Thresholder():
                 if img[i, j] >= thresh:
                     thresholded_img[i, j] = 255
 
-        self.output_image_viewer.current_image.modified_image= thresholded_img
+        self.output_image_viewer.current_image.modified_image = thresholded_img
+
+    def compute_histogram(self):
+        # creates a 1d arr hist of size 256
+        hist = np.zeros(256, dtype=np.float32)
+        for pixel in self.output_image_viewer.current_image.modified_image.flatten():
+            hist[int(pixel)] += 1
+        hist = hist / np.sum(hist)
+        return hist
 
     def restore_original_img(self):
         imported_image_gray_scale = cv2.cvtColor(self.output_image_viewer.current_image.original_image, cv2.COLOR_BGR2GRAY)
