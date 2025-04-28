@@ -19,12 +19,29 @@ class Optimal_thresholding():
             current_thresh = self.compute_initial_threshold()
             pdf = self.thresholder.compute_histogram()
 
+            # breaks when convergence is achieved
             while True:
                 # splits pixels into two groups (object and background) based on the current threshold
                 # calculates  means of each group and updates the threshold as the avg of these means
-                mean1, mean2 = 0,0
+                background_sum, object_sum = 0.0, 0.0
+                background_cdf, object_cdf = 0.0, 0.0
 
-                new_thresh = (mean1 + mean2) / 2
+                # looping over all intensities
+                for i in range(256):
+                    #object
+                    if i <= current_thresh:
+                        object_sum += i * pdf[i]
+                        object_cdf += pdf[i]
+                    # background
+                    else:
+                        background_sum += i* pdf[i]
+                        object_cdf += pdf[i]
+
+                # mean = weighted sum / cumulative probability
+                background_mean = background_sum / max(background_cdf, 1e-10) if background_cdf > 0 else 0
+                object_mean = object_sum / max(object_cdf, 1e-10) if object_cdf > 0 else 0
+
+                new_thresh = (background_mean + object_mean) / 2
                 if abs(current_thresh - new_thresh) < self.epsilon:
                     self.thresholder.apply_thresholding(threshold_type, current_thresh)
                     break
