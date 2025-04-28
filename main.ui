@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1383</width>
-    <height>960</height>
+    <height>971</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -876,7 +876,7 @@ font-weight:500;</string>
             <property name="minimumSize">
              <size>
               <width>650</width>
-              <height>0</height>
+              <height>700</height>
              </size>
             </property>
             <property name="styleSheet">
