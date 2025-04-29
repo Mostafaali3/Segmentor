@@ -74,6 +74,11 @@ class MainWindow(QMainWindow):
         self.segmentation_slider = self.findChild(QSlider, "iterations_slider")
         self.segmentation_slider.valueChanged.connect(self.on_segmentation_slider_value_changed)
         
+        self.block_size_slider = self.findChild(QSlider, "threshold_value_slider")
+        self.block_size_slider.valueChanged.connect(self.on_block_size_slider_value_changed)
+        
+        self.block_size_slider_label = self.findChild(QLabel, "therolding_value_label")
+        
         self.reset_button = self.findChild(QPushButton, "pushButton_2")
         self.reset_button.clicked.connect(self.reset)
 
@@ -91,7 +96,8 @@ class MainWindow(QMainWindow):
         self.global_threshold.toggled.connect(self.on_threshold_selected)
 
         self.thresholding_method_selector = self.findChild(QComboBox, 'threshold_type')
-
+        self.slider_label = self.findChild(QLabel, "label_8")
+        self.slider_label.setText("no. of clusters:")
 
         
         
@@ -115,10 +121,10 @@ class MainWindow(QMainWindow):
         '''
         text = self.segmentation_combobox.currentText()
         slider_label = self.findChild(QLabel, "label_8")
-        if text == 'K-nearest neighbor (KNN)':
+        if text == 'K-means':
             slider_label.setText("no. of clusters:")
             self.output_viewer.current_segmentation_mode = SegmentationType.KNN
-
+            self.segmentation_slider.setRange(1, 10)
         elif text == 'Mean shifting':
             slider_label.setText("kernel size")
             self.segmentation_slider.setMaximum(300)
@@ -135,11 +141,12 @@ class MainWindow(QMainWindow):
         else:
             slider_label.setText("no. of clusters:")
             self.output_viewer.current_segmentation_mode = SegmentationType.AGGLOMERATIVE
+            self.segmentation_slider.setRange(1, 10)
             pass #write your code her
         
     def on_apply_button_clicked(self):
         text = self.segmentation_combobox.currentText()
-        if text == 'K-nearest neighbor (KNN)':
+        if text == 'K-means':
             self.kmeans.apply_kmeans(self.segmentation_slider.value())
 
 
@@ -157,8 +164,10 @@ class MainWindow(QMainWindow):
         thresholding_method = self.thresholding_method_selector.currentText()
         print(f"thresh type {self.threshold_type}")
         print(f"thresh method {thresholding_method}")
+        print(f"block size value {int(self.block_size_slider.value())}")
+        block_size = int(self.block_size_slider.value())
 
-        self.thresholder.apply_thresholding(self.threshold_type, thresholding_method)
+        self.thresholder.apply_thresholding(self.threshold_type, thresholding_method, block_size)
         self.controller.update()
 
     def on_threshold_selected(self):
@@ -170,6 +179,14 @@ class MainWindow(QMainWindow):
             elif self.sender() == self.global_threshold:
                 self.threshold_type = "GLOBAL"
                 self.thresholder.check_global_selection = True
+    
+    def on_block_size_slider_value_changed(self):
+        self.block_size_slider_label.setText(f"{self.block_size_slider.value()}")
+
+        
+        
+        
+        
 
         
     def browse_(self):
@@ -180,6 +197,9 @@ class MainWindow(QMainWindow):
                 image = Image(temp_image)
                 self.input_viewer.current_image = image
                 self.output_viewer.current_image = image
+                height, width, z = self.output_viewer.current_image.modified_image.shape
+                
+                self.block_size_slider.setRange(3, max(height, width) )
                 self.controller.update()
         
     def reset(self):

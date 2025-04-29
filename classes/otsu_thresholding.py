@@ -15,15 +15,15 @@ class Otsu_thresholding():
         # thresh_range = range(max_intensity + 1) # could ve been 256 as we r sure that the img is gray
         thresh_range = range(256)
 
-        min_criteria = np.inf
+        max_criteria = np.inf
         best_thresh = 0
 
         pdf = self.compute_histogram(image)
 
         for thresh in thresh_range:
             criteria = self.get_best_threshold(pdf, thresh)
-            if criteria < min_criteria:
-                min_criteria = criteria
+            if criteria < max_criteria:
+                max_criteria = criteria
                 best_thresh = thresh
 
         return best_thresh

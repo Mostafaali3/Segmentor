@@ -25,7 +25,7 @@ class region_growing():
                 #     print("img is not gray")
                 #     self.output_image_viewer.current_image.transfer_to_gray_scale()
 
-                base_seed = self.output_image_viewer.current_image.modified_image[self.seed_y, self.seed_x]
+                # base_seed = self.output_image_viewer.current_image.modified_image[self.seed_y, self.seed_x]
 
                 queue = collections.deque()
                 queue.append((self.seed_y, self.seed_x))

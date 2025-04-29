@@ -242,7 +242,7 @@ font-weight:500;
 border: None;</string>
                  </property>
                  <property name="text">
-                  <string>Threshold value:</string>
+                  <string>Block Size:</string>
                  </property>
                 </widget>
                </item>
@@ -388,11 +388,6 @@ QComboBox::down-arrow {
 }
 </string>
                  </property>
-                 <item>
-                  <property name="text">
-                   <string>Manual thresholding</string>
-                  </property>
-                 </item>
                  <item>
                   <property name="text">
                    <string>Otsu thresholding</string>
@@ -591,6 +586,16 @@ font-weight:500;</string>
                  <property name="text">
                   <string>Browse</string>
                  </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>icons_setup/icons/image.png</normaloff>icons_setup/icons/image.png</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>22</width>
+                   <height>22</height>
+                  </size>
+                 </property>
                 </widget>
                </item>
               </layout>
@@ -661,7 +666,7 @@ QComboBox::down-arrow {
                  </property>
                  <item>
                   <property name="text">
-                   <string>K-nearest neighbor (KNN)</string>
+                   <string>K-means</string>
                   </property>
                  </item>
                  <item>

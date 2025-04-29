@@ -14,12 +14,12 @@ class Thresholder():
         self.otsu_thresholding = Otsu_thresholding(output_image_viewer)
         self.spectral_thresholding = Spectral_thresholding(output_image_viewer)
 
-    def apply_thresholding(self, threshold_type, thresh_method):
+    def apply_thresholding(self, threshold_type, thresh_method, block_size):
         # thesh_val passed 3la 7asb the method --> handle it later
         if self.output_image_viewer.current_image is not None:
             if threshold_type == "LOCAL":
                 self.restore_original_img()
-                self.apply_local_thresholding(thresh_method)
+                self.apply_local_thresholding(thresh_method, block_size)
             elif threshold_type == "GLOBAL" and self.check_global_selection:
                 self.restore_original_img()
                 self.apply_global_thresholding(thresh_method)
@@ -57,11 +57,10 @@ class Thresholder():
         print(f"thresh img {thresholded_img}")
         self.output_image_viewer.current_image.modified_image = thresholded_img
 
-    def apply_local_thresholding(self, thresh_method):
+    def apply_local_thresholding(self, thresh_method, block_size):
         height, width = self.output_image_viewer.current_image.modified_image.shape
         thresholded_img = np.zeros((height, width), dtype=np.uint8)
         # block_size = max(height, width)
-        block_size = 32
 
         image = self.output_image_viewer.current_image.modified_image
 

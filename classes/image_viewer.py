@@ -23,6 +23,7 @@ class ImageViewer(pg.ImageView):
         self.current_segmentation_mode = None
         self.region_growing = None
         self.clicked_point = None
+        self.plotted_point = None
 
     def mousePressEvent(self, event):
         if self.viewer_type == ViewerType.OUTPUT:
@@ -55,11 +56,30 @@ class ImageViewer(pg.ImageView):
 
                         self.region_growing.seed_x = img_x
                         self.region_growing.seed_y = img_y
+                        
+                        if self.plotted_point:
+                            view = self.getView()
+                            view.removeItem(self.plotted_point)
+                        point = pg.ScatterPlotItem(x = [img_x], y=[img_y], brush='r', size=12)
+                        self.getView().addItem(point)
+                        self.plotted_point = point
+                        
                         #
                         # # You can call RegionGrowing here
                         # self.update()
                         # self.region_growing((img_y, img_x))
-
+                else:
+                    if self.plotted_point:
+                        self.getView().removeItem(self.plotted_point)
+                        self.plotted_point = None
+            else:
+                if self.plotted_point:
+                    self.getView().removeItem(self.plotted_point)
+                    self.plotted_point = None
+        else:
+            if self.plotted_point:
+                self.getView().removeItem(self.plotted_point)
+                self.plotted_point = None
     # def paintEvent(self, event):
     #     painter = QPainter(self)
     #
@@ -87,3 +107,6 @@ class ImageViewer(pg.ImageView):
             elif self.viewer_type == ViewerType.OUTPUT:
                 self.setImage(cv2.transpose(self.current_image.modified_image))
                 view.setLimits(xMin = 0, xMax=self.current_image.modified_image.shape[1], yMin = 0, yMax = self.current_image.modified_image.shape[0])
+                if self.plotted_point:
+                        self.getView().removeItem(self.plotted_point)
+                        self.plotted_point = None
