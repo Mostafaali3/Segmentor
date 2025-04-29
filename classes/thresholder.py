@@ -60,8 +60,8 @@ class Thresholder():
     def apply_local_thresholding(self, thresh_method):
         height, width = self.output_image_viewer.current_image.modified_image.shape
         thresholded_img = np.zeros((height, width), dtype=np.uint8)
-        block_size = max(height, width)
-        # block_size = 32
+        # block_size = max(height, width)
+        block_size = 32
 
         image = self.output_image_viewer.current_image.modified_image
 

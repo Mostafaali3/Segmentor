@@ -29,7 +29,7 @@ class Optimal_thresholding():
                 # looping over all intensities
                 for i in range(256):
                     #object
-                    if i <= current_thresh:
+                    if i > current_thresh:
                         object_sum += i * pdf[i]
                         object_cdf += pdf[i]
                     # background
@@ -41,9 +41,6 @@ class Optimal_thresholding():
                 background_mean = background_sum / background_cdf if background_cdf > 0 else 0
                 object_mean = object_sum / object_cdf if object_cdf > 0 else 0
 
-                print(f"background_mean is {background_mean}")
-                print(f"object_mean is {object_mean}")
-
                 new_thresh = (background_mean + object_mean) / 2
                 print(f"new_thresh is {new_thresh}")
                 print(f"current_thresh is {current_thresh}")
@@ -53,6 +50,8 @@ class Optimal_thresholding():
                     print(f"cnt is {cnt}")
                     return current_thresh
                 current_thresh = new_thresh
+
+
 
 
     def compute_initial_threshold(self, image):
@@ -66,7 +65,9 @@ class Optimal_thresholding():
         ]
 
         init_thresh = np.mean(corner_pixels)
+        # init_thresh = np.mean(image)
         return init_thresh
+
 
     def compute_histogram(self, image):
         # creates a 1d arr hist of size 256
