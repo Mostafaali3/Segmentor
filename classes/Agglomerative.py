@@ -4,6 +4,9 @@ import cv2
 from classes.Kmeans import Kmeans
 from skimage.segmentation import slic
 from skimage.measure import regionprops
+import logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 class Agglomerative():
     def __init__(self, input_viewer, output_viewer,max_num_of_iterations = 10 ):
         self.input_viewer = input_viewer
@@ -19,39 +22,72 @@ class Agglomerative():
         self.feature_space = self.get_feature_space()
         self.make_agglomerative()
         self.apply_clustering_on_image()
+
     def get_feature_space(self):
         print("iam in get feature")
         # take the feature space of self.input_viewer.current_image with the location
         image_bgr = self.input_viewer.current_image.modified_image
         image_rgb = cv2.cvtColor(self.input_viewer.current_image.modified_image, cv2.COLOR_BGR2RGB)
-        # image_hsv = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2HSV)
-        h,w,c = image_rgb.shape
+        h, w, c = image_rgb.shape
 
-        # extract the coordinate to encourge the closer to be the same cluster
-        x_coords, y_coords = np.meshgrid(np.arange(w),np.arange(h)) # get locations as we have w , h  only
+        # extract the coordinate to encourage the closer to be the same cluster
+        x_coords, y_coords = np.meshgrid(np.arange(w), np.arange(h))  # get locations as we have w, h only
 
         # normalize the x and y coords
-        x_coords = x_coords/w
-        y_coords = y_coords/h
+        x_coords = x_coords / w
+        y_coords = y_coords / h
 
         # get the vector for each feature (5d space)
-        # hs_features = image_hsv[:, :, :2].reshape(-1, 2).astype(np.float32)
-        rgb = image_rgb.reshape(-1, 3).astype(np.float32)/255.0 # for each pixel i we have vector [r g b]
-        x_coords = x_coords.reshape(-1, 1) # to get the x coord for each pixel "flatten"
-        y_coords = y_coords.reshape(-1, 1) # to get y coord for each pixel
-        full_feature_space = np.hstack((rgb, x_coords, y_coords)) # for each pixel we have [r g b x y]
+        rgb = image_rgb.reshape(-1, 3).astype(np.float32) / 255.0  # for each pixel i we have vector [r g b]
+        x_coords = x_coords.reshape(-1, 1)  # to get the x coord for each pixel "flatten"
+        y_coords = y_coords.reshape(-1, 1)  # to get y coord for each pixel
+        full_feature_space = np.hstack((rgb, x_coords, y_coords))  # for each pixel we have [r g b x y]
         print("getting super pixel")
-        # convert image to 5000 super pixel instead as it will be time and space computionally expensive to make it on the orignla pixels
 
+        # convert image to 1000 superpixels instead as it will be time and space computationally expensive
         num_initial_clusters = 1000
-        labels = slic(image_rgb, n_segments=num_initial_clusters, compactness=10, sigma=1)
-        regions = regionprops(labels, intensity_image=image_rgb)
-        kmeans_centroids = np.array(
-            [[r.mean_intensity[0] / 255.0, r.mean_intensity[1] / 255.0, r.mean_intensity[2] / 255.0,
-              r.centroid[1] / w , r.centroid[0] / h ] for r in regions])
+        labels = slic(image_rgb, n_segments=num_initial_clusters, compactness=10, sigma=1, start_label=0)
+
+        # reindex labels to ensure indices [0, N) means from 0 >> 999
+        unique_labels = np.unique(labels)
+        label_map = {old: new for new, old in enumerate(unique_labels)}
+        reindexed_labels = np.array([label_map[label] for label in labels.flatten()]).reshape(labels.shape)
+
+        # compute centroids of super pixel to be the feature using regionprops
+        regions = regionprops(reindexed_labels + 1, intensity_image=image_rgb)  # +1 to avoid label 0 issues
+        kmeans_centroids = np.array([
+            [r.mean_intensity[0] / 255.0, r.mean_intensity[1] / 255.0, r.mean_intensity[2] / 255.0,
+             r.centroid[1] / w, r.centroid[0] / h]
+            for r in regions
+        ])
+
         self.superpixel_centroids = kmeans_centroids
-        self.pixel_assignments = labels.flatten()
-        return kmeans_centroids
+        self.pixel_assignments = reindexed_labels.flatten()
+
+        # logging
+        num_superpixels = len(unique_labels)
+        logger.info(f"Generated {num_superpixels} superpixels, {len(kmeans_centroids)} centroids")
+        if num_superpixels != len(kmeans_centroids):
+            logger.warning(f"Mismatch: {num_superpixels} labels vs {len(kmeans_centroids)} centroids")
+        max_index = np.max(self.pixel_assignments)
+        if max_index >= len(kmeans_centroids):
+            logger.error(f"Invalid superpixel indices: max {max_index} vs {len(kmeans_centroids)} centroids")
+            self.pixel_assignments = np.clip(self.pixel_assignments, 0, len(kmeans_centroids) - 1)
+            logger.info("Clipped invalid indices to valid range")
+        logger.info(f"Unique superpixel indices: {np.unique(self.pixel_assignments).tolist()}")
+
+        # visulaization
+        superpixel_img = np.zeros((h, w, 3), dtype=np.uint8)
+        for region in regions:
+            label = region.label - 1
+            mean_rgb = np.array([region.mean_intensity[0], region.mean_intensity[1], region.mean_intensity[2]])
+            coords = region.coords
+            for y, x in coords:
+                superpixel_img[y, x] = (mean_rgb * 255).astype(np.uint8)
+
+        cv2.imwrite("superpixels.png", cv2.cvtColor(superpixel_img, cv2.COLOR_RGB2BGR))
+        logger.info("Saved superpixel visualization to superpixels.png")
+        return kmeans_centroids # feature that we willl work on it
 
     def make_agglomerative(self):
         print("make the agglomerative")
