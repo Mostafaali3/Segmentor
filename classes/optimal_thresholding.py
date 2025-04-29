@@ -7,6 +7,7 @@ class Optimal_thresholding():
         self.epsilon = 0.002
 
     def apply_optimal_thresholding(self, image):
+        cnt = 0
         if self.output_image_viewer.current_image is not None:
             if len(image.shape) == 3:
                 print("img is not gray")
@@ -37,12 +38,19 @@ class Optimal_thresholding():
                         background_cdf += pdf[i]
 
                 # mean = weighted sum / cumulative probability
-                background_mean = background_sum / max(background_cdf, 1e-10) if background_cdf > 0 else 0
-                object_mean = object_sum / max(object_cdf, 1e-10) if object_cdf > 0 else 0
+                background_mean = background_sum / background_cdf if background_cdf > 0 else 0
+                object_mean = object_sum / object_cdf if object_cdf > 0 else 0
+
+                print(f"background_mean is {background_mean}")
+                print(f"object_mean is {object_mean}")
 
                 new_thresh = (background_mean + object_mean) / 2
+                print(f"new_thresh is {new_thresh}")
+                print(f"current_thresh is {current_thresh}")
+                cnt+= 1
                 if abs(current_thresh - new_thresh) < self.epsilon:
                     # self.thresholder.apply_thresholding(threshold_type, current_thresh)
+                    print(f"cnt is {cnt}")
                     return current_thresh
                 current_thresh = new_thresh
 
@@ -67,6 +75,8 @@ class Optimal_thresholding():
             hist[int(pixel)] += 1
         hist = hist / np.sum(hist)
         return hist
+
+
 
 
 

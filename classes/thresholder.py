@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 from classes.optimal_thresholding import Optimal_thresholding
+from classes.otsu_thresholding import Otsu_thresholding
 
 
 class Thresholder():
@@ -9,6 +10,7 @@ class Thresholder():
         self.threshold_type = None
         self.check_global_selection = False
         self.optimal_thresholding = Optimal_thresholding(output_image_viewer)
+        self.otsu_thresholding = Otsu_thresholding(output_image_viewer)
 
     def apply_thresholding(self, threshold_type, thresh_method):
         # thesh_val passed 3la 7asb the method --> handle it later
@@ -27,7 +29,7 @@ class Thresholder():
         if thresh_method == "Optimal thresholding":
             thersh_val = self.apply_optimal_thresholding(self.output_image_viewer.current_image.modified_image)
         elif thresh_method == "Otsu thresholding":
-            pass
+            thersh_val = self.apply_otsu_thresholding(self.output_image_viewer.current_image.modified_image)
         elif thresh_method == "Spectral thresholding":
             pass
 
@@ -44,7 +46,9 @@ class Thresholder():
     def apply_local_thresholding(self, thresh_method):
         height, width = self.output_image_viewer.current_image.modified_image.shape
         thresholded_img = np.zeros((height, width), dtype=np.uint8)
+        # block_size = max(height, width)
         block_size = 32
+
         image = self.output_image_viewer.current_image.modified_image
 
         for row in range(0, height, block_size):
@@ -56,7 +60,7 @@ class Thresholder():
                 if thresh_method == "Optimal thresholding":
                     thresh_val = self.apply_optimal_thresholding(block)
                 elif thresh_method == "Otsu thresholding":
-                    thresh_val = 128
+                    thresh_val = self.apply_otsu_thresholding(block)
                 elif thresh_method == "Spectral thresholding":
                     thresh_val = 128
                 else:
@@ -72,8 +76,9 @@ class Thresholder():
         optimal_thresh = self.optimal_thresholding.apply_optimal_thresholding(image)
         return optimal_thresh
 
-    def apply_otsu_thresholding(self):
-        pass
+    def apply_otsu_thresholding(self, image):
+        otsu_thresh = self.otsu_thresholding.apply_otsu_thresholding(image)
+        return otsu_thresh
 
 
     def apply_specular_thresholding(self):
