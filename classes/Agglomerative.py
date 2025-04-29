@@ -2,7 +2,8 @@ from classes.image_viewer import ImageViewer
 import numpy as np
 import cv2
 from classes.Kmeans import Kmeans
-
+from skimage.segmentation import slic
+from skimage.measure import regionprops
 class Agglomerative():
     def __init__(self, input_viewer, output_viewer,max_num_of_iterations = 10 ):
         self.input_viewer = input_viewer
@@ -35,7 +36,7 @@ class Agglomerative():
 
         # get the vector for each feature (5d space)
         # hs_features = image_hsv[:, :, :2].reshape(-1, 2).astype(np.float32)
-        rgb = image_rgb.reshape(-1, 3).astype(np.float32) # for each pixel i we have vector [r g b]
+        rgb = image_rgb.reshape(-1, 3).astype(np.float32)/255.0 # for each pixel i we have vector [r g b]
         x_coords = x_coords.reshape(-1, 1) # to get the x coord for each pixel "flatten"
         y_coords = y_coords.reshape(-1, 1) # to get y coord for each pixel
         full_feature_space = np.hstack((rgb, x_coords, y_coords)) # for each pixel we have [r g b x y]
@@ -43,24 +44,15 @@ class Agglomerative():
         # convert image to 5000 super pixel instead as it will be time and space computionally expensive to make it on the orignla pixels
 
         num_initial_clusters = 1000
-        kmean = Kmeans(self.input_viewer, self.output_viewer, 30)
-        kmean.feature_space = full_feature_space
-        kmean.num_of_clusters = num_initial_clusters
-
-        kmean.centroids = full_feature_space[np.random.choice(full_feature_space.shape[0], num_initial_clusters, replace=False)]
-
-
-        kmeans_centroids, kmeans_clusters = kmean.make_clustering()
-
-
-        self.kmeans_centroids = kmeans_centroids # note that this is center of feature sample that consist of [r g b x y] and the clusters contain sample of feature space of same structure
+        labels = slic(image_rgb, n_segments=num_initial_clusters, compactness=10, sigma=1)
+        regions = regionprops(labels, intensity_image=image_rgb)
+        kmeans_centroids = np.array(
+            [[r.mean_intensity[0] / 255.0, r.mean_intensity[1] / 255.0, r.mean_intensity[2] / 255.0,
+              r.centroid[1] / w , r.centroid[0] / h ] for r in regions])
         self.superpixel_centroids = kmeans_centroids
-        # map pixels to super pixels
-        self.pixel_assignments = np.zeros(len(full_feature_space), dtype=int)
-        for superpixel_idx, cluster in enumerate(kmeans_clusters):
-            cluster_indices = np.array(cluster).astype(np.int32)
-            self.pixel_assignments[cluster_indices] = superpixel_idx
+        self.pixel_assignments = labels.flatten()
         return kmeans_centroids
+
     def make_agglomerative(self):
         print("make the agglomerative")
         # first we assume each one of our super pixel as cluster
@@ -132,8 +124,6 @@ class Agglomerative():
         return np.argmin(distances)
 
     def ward_distance(self, points_c1, points_c2):
-
-
         n1, n2 = len(points_c1), len(points_c2)
         if n1 == 0 or n2 == 0:
             return float('inf')
