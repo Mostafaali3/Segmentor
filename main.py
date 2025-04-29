@@ -7,6 +7,7 @@ from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt, QTimer
 from classes.image import Image
 from classes.image_viewer import ImageViewer
+from classes.region_growing import region_growing
 from enums.viewerType import ViewerType
 from classes.controller import Controller
 import cv2
@@ -49,6 +50,11 @@ class MainWindow(QMainWindow):
         
         self.browse_button = self.findChild(QPushButton, "browse")
         self.browse_button.clicked.connect(self.browse_)
+
+        self.region_growing = region_growing(self.output_viewer)
+        self.output_viewer.region_growing = self.region_growing
+
+
         
         self.segmentation_combobox = self.findChild(QComboBox, "segmentation_type")
         self.segmentation_combobox.currentIndexChanged.connect(self.on_segmentation_combobox_index_changed)
@@ -60,7 +66,7 @@ class MainWindow(QMainWindow):
         
         self.segmentation_browse_button = self.findChild(QPushButton, "browse_segmentation")
         self.segmentation_browse_button.clicked.connect(self.browse_)
-        
+
         self.segmentation_slider_counter_label = self.findChild(QLabel, "iterations_label")
         
         self.segmentation_slider = self.findChild(QSlider, "iterations_slider")
@@ -118,8 +124,10 @@ class MainWindow(QMainWindow):
             pass #write your code her
         
         elif text == 'Region growing':
-            slider_label.setText("Max no. of iterations:")
+            slider_label.setText("threshold:")
             self.output_viewer.current_segmentation_mode = SegmentationType.REGION_GROWING
+            self.segmentation_slider.setRange(1, 250)
+            self.segmentation_slider.setValue(100)
             pass #write your code her
         
         else:
@@ -137,7 +145,7 @@ class MainWindow(QMainWindow):
             self.mean_shift_segmenter.apply_mean_shift(self.segmentation_slider.value())
         
         elif text == 'Region growing':
-            pass #write your code her
+            self.region_growing.apply_region_growing(self.segmentation_slider.value())
         else:
             pass #write your code her
         self.controller.update()
