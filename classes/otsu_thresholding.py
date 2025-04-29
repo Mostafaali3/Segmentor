@@ -28,9 +28,6 @@ class Otsu_thresholding():
 
         return best_thresh
 
-
-
-
     def get_best_threshold(self, pdf, thresh):
         background_weight, foreground_weight = 0.0, 0.0
         background_sum, foreground_sum = 0.0, 0.0

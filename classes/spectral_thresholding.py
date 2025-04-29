@@ -12,31 +12,32 @@ class Spectral_thresholding():
                 print("img is not gray")
 
         pdf = self.compute_histogram(image)
+
         overall_mean = 0.0
-
-        for i in range(256):
-            overall_mean += i * pdf[i]
-
-        max_var = -np.inf
         best_low_thresh = 0
         best_high_thresh = 0
+        step = 5
 
-        for low_thresh in range(256):
-            for high_thresh in range(low_thresh + 1, 256):
-                left_weight, middle_weight, right_weight = 0.0, 0.0, 0.0
-                left_sum, middle_sum, right_sum = 0.0, 0.0, 0.0
+        overall_mean = np.sum(np.arange(256) * pdf)
+        max_var = -np.inf
+
+        for low_thresh in range(0, 256, step):
+            for high_thresh in range(low_thresh + step, 256, step):
+                # left_weight, middle_weight, right_weight = 0.0, 0.0, 0.0
+                # left_sum, middle_sum, right_sum = 0.0, 0.0, 0.0
                 left_mean, middle_mean, right_mean = 0.0, 0.0, 0.0
 
-                for i in range(256):
-                    if i <= low_thresh:
-                        left_weight += pdf[i]
-                        left_sum += i * pdf[i]
-                    elif i <= high_thresh:
-                        middle_weight += pdf[i]
-                        middle_sum += i * pdf[i]
-                    else:
-                        right_weight += pdf[i]
-                        right_sum += i * pdf[i]
+                mask_left = (np.arange(256) <= low_thresh)
+                mask_middle = (np.arange(256) > low_thresh) & (np.arange(256) <= high_thresh)
+                mask_right = (np.arange(256) > high_thresh)
+
+                left_weight = np.sum(pdf[mask_left])
+                middle_weight = np.sum(pdf[mask_middle])
+                right_weight = np.sum(pdf[mask_right])
+
+                left_sum = np.sum(np.arange(256)[mask_left] * pdf[mask_left])
+                right_sum = np.sum(np.arange(256)[mask_right] * pdf[mask_right])
+                middle_sum = np.sum(np.arange(256)[mask_middle] * pdf[mask_middle])
 
                 if left_weight == 0 or middle_weight == 0 or right_weight == 0: # iteration malhas lazma / divsion by zero
                     continue
@@ -71,4 +72,26 @@ class Spectral_thresholding():
 
 
 
-
+        # for low_thresh in range(0, 256):
+        #     for high_thresh in range(low_thresh + 1, 256):
+        #         left_weight, middle_weight, right_weight = 0.0, 0.0, 0.0
+        #         left_sum, middle_sum, right_sum = 0.0, 0.0, 0.0
+        #         left_mean, middle_mean, right_mean = 0.0, 0.0, 0.0
+        #
+        #         for i in range(256):
+        #             if i <= low_thresh:
+        #                 left_weight += pdf[i]
+        #                 left_sum += i * pdf[i]
+        #             elif i <= high_thresh:
+        #                 middle_weight += pdf[i]
+        #                 middle_sum += i * pdf[i]
+        #             else:
+        #                 right_weight += pdf[i]
+        #                 right_sum += i * pdf[i]
+        #
+        #         if left_weight == 0 or middle_weight == 0 or right_weight == 0: # iteration malhas lazma / divsion by zero
+        #             continue
+        #
+        #         left_mean = left_sum / left_weight
+        #         right_mean = right_sum / right_weight
+        #         middle_mean = middle_sum / middle_weight
