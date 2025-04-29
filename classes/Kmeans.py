@@ -3,11 +3,15 @@ import numpy as np
 import cv2
 
 class Kmeans():
-    def __init__(self, input_viewer, output_viewer,max_num_of_iterations = 100 ):
+    def __init__(self, input_viewer, output_viewer,max_num_of_iterations = 30 ):
         self.input_viewer = input_viewer
         self.output_viewer = output_viewer
         self.num_of_iterations = max_num_of_iterations
-        self.convergence_thereshold = 1e-3
+        self.convergence_thereshold = 1e-2
+        self.centroids =[]
+        self.feature_space = []
+        self.num_of_clusters = 3
+        self.clusters = []
     def apply_kmeans(self, k):
         print("apply the k mean clustering")
         self.num_of_clusters = k
@@ -100,7 +104,7 @@ class Kmeans():
         return np.linalg.norm(centroids - sample, axis=1)
 
     def apply_clustering_on_image(self):
-        print("apply colors based on centroids")
+        print("apply colors based on centroids in kmeans ")
 
         img = self.input_viewer.current_image.modified_image
         h, w, c = img.shape

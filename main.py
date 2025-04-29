@@ -11,6 +11,7 @@ from classes.region_growing import region_growing
 from enums.viewerType import ViewerType
 from classes.controller import Controller
 import cv2
+from classes.Agglomerative import Agglomerative
 
 from classes.Kmeans import Kmeans
 
@@ -45,6 +46,7 @@ class MainWindow(QMainWindow):
         self.modes_stacked_widget = self.findChild(QStackedWidget, "stackedWidget")
 
         self.kmeans = Kmeans(self.input_viewer, self.output_viewer)
+        self.agglomerative = Agglomerative(self.input_viewer, self.output_viewer)
         
         self.controller = Controller(self.input_viewer, self.output_viewer)
         
@@ -114,7 +116,7 @@ class MainWindow(QMainWindow):
         text = self.segmentation_combobox.currentText()
         slider_label = self.findChild(QLabel, "label_8")
         if text == 'K-nearest neighbor (KNN)':
-            slider_label.setText("Max no. of iterations:")
+            slider_label.setText("no. of clusters:")
             self.output_viewer.current_segmentation_mode = SegmentationType.KNN
 
         elif text == 'Mean shifting':
@@ -131,14 +133,14 @@ class MainWindow(QMainWindow):
             pass #write your code her
         
         else:
-            slider_label.setText("Max no. of iterations:")
+            slider_label.setText("no. of clusters:")
             self.output_viewer.current_segmentation_mode = SegmentationType.AGGLOMERATIVE
             pass #write your code her
         
     def on_apply_button_clicked(self):
         text = self.segmentation_combobox.currentText()
         if text == 'K-nearest neighbor (KNN)':
-            self.kmeans = Kmeans(self.input_viewer, self.output_viewer)
+            self.kmeans.apply_kmeans(self.segmentation_slider.value())
 
 
         elif text == 'Mean shifting':
@@ -147,7 +149,7 @@ class MainWindow(QMainWindow):
         elif text == 'Region growing':
             self.region_growing.apply_region_growing(self.segmentation_slider.value())
         else:
-            pass #write your code her
+            self.agglomerative.apply_agglomerative(self.segmentation_slider.value())
         self.controller.update()
 
 
