@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 from classes.optimal_thresholding import Optimal_thresholding
+from classes.otsu_thresholding import Otsu_thresholding
 
 
 class Thresholder():
@@ -9,6 +10,7 @@ class Thresholder():
         self.threshold_type = None
         self.check_global_selection = False
         self.optimal_thresholding = Optimal_thresholding(output_image_viewer)
+        self.otsu_thresholding = Otsu_thresholding(output_image_viewer)
 
     def apply_thresholding(self, threshold_type, thresh_method):
         # thesh_val passed 3la 7asb the method --> handle it later
@@ -27,10 +29,9 @@ class Thresholder():
         if thresh_method == "Optimal thresholding":
             thersh_val = self.apply_optimal_thresholding(self.output_image_viewer.current_image.modified_image)
         elif thresh_method == "Otsu thresholding":
-            pass
+            thersh_val = self.apply_otsu_thresholding(self.output_image_viewer.current_image.modified_image)
         elif thresh_method == "Spectral thresholding":
             pass
-
 
         for row in range(height):
             for col in range(width):
@@ -42,40 +43,42 @@ class Thresholder():
 
         self.output_image_viewer.current_image.modified_image = thresholded_img
 
-
     def apply_local_thresholding(self, thresh_method):
-        block_size = 11
-        c= 2
         height, width = self.output_image_viewer.current_image.modified_image.shape
         thresholded_img = np.zeros((height, width), dtype=np.uint8)
-        img = self.output_image_viewer.current_image.modified_image
-        for i in range(height):
-            for j in range(width):
-                x_min = max(0, i - block_size // 2)
-                y_min = max(0, j - block_size // 2)
-                x_max = min(height -1, i + block_size // 2)
-                y_max = min(width - 1, j + block_size // 2)
-                block = img[x_min:x_max + 1, y_min:y_max + 1]
+        # block_size = max(height, width)
+        block_size = 32
 
-                # not calculated
+        image = self.output_image_viewer.current_image.modified_image
+
+        for row in range(0, height, block_size):
+            for col in range(0, width, block_size):
+                block_end_row = min(row + block_size, height)
+                block_end_col = min(col + block_size, width)
+                block = image[row:block_end_row, col:block_end_col]
+
                 if thresh_method == "Optimal thresholding":
-                    thersh_val = self.apply_optimal_thresholding(block)
+                    thresh_val = self.apply_optimal_thresholding(block)
                 elif thresh_method == "Otsu thresholding":
-                    pass
+                    thresh_val = self.apply_otsu_thresholding(block)
                 elif thresh_method == "Spectral thresholding":
-                    pass
+                    thresh_val = 128
+                else:
+                    thresh_val = 128
 
-                if img[i, j] >= thersh_val:
-                    thresholded_img[i, j] = 255
+                block_thresholded = np.where(block < thresh_val, 0, 255)
+                thresholded_img[row:block_end_row, col:block_end_col] = block_thresholded
 
         self.output_image_viewer.current_image.modified_image = thresholded_img
+
 
     def apply_optimal_thresholding(self, image):
         optimal_thresh = self.optimal_thresholding.apply_optimal_thresholding(image)
         return optimal_thresh
 
-    def apply_otsu_thresholding(self):
-        pass
+    def apply_otsu_thresholding(self, image):
+        otsu_thresh = self.otsu_thresholding.apply_otsu_thresholding(image)
+        return otsu_thresh
 
 
     def apply_specular_thresholding(self):
@@ -84,11 +87,6 @@ class Thresholder():
     def restore_original_img(self):
         imported_image_gray_scale = cv2.cvtColor(self.output_image_viewer.current_image.original_image, cv2.COLOR_BGR2GRAY)
         self.output_image_viewer.current_image.modified_image = np.array(imported_image_gray_scale, dtype=np.uint8)
+        print("img is now gray")
 
-    # def compute_histogram(self):
-    #     # creates a 1d arr hist of size 256
-    #     hist = np.zeros(256, dtype=np.float32)
-    #     for pixel in self.output_image_viewer.current_image.modified_image.flatten():
-    #         hist[int(pixel)] += 1
-    #     hist = hist / np.sum(hist)
-    #     return hist
+

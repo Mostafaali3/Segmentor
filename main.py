@@ -156,6 +156,9 @@ class MainWindow(QMainWindow):
         print(f"thresh type {self.threshold_type}")
         print(f"thresh method {thresholding_method}")
 
+        self.thresholder.apply_thresholding(self.threshold_type, thresholding_method)
+        self.controller.update()
+
     def on_threshold_selected(self):
         # never calling it twice
         if self.sender().isChecked():
@@ -165,8 +168,6 @@ class MainWindow(QMainWindow):
             elif self.sender() == self.global_threshold:
                 self.threshold_type = "GLOBAL"
                 self.thresholder.check_global_selection = True
-
-
 
         
     def browse_(self):
